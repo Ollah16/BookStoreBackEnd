@@ -1,5 +1,5 @@
 const express = require('express');
-const { handleLogin, handleUploader, handleUploaderId, handleUser, handleRegistration } = require('../contoller/userControl');
+const { handleLogin, handleUploader, handleUser, handleRegistration, handleUploaderId } = require('../contoller/userControl');
 const router = express.Router()
 
 router.post("/register", handleRegistration);

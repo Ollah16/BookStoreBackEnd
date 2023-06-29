@@ -22,13 +22,11 @@ const handleBookId = async (req, res) => {
 
 const handleEdit = async (req, res) => {
     let { bookId } = req.params
-    let response = 'edited succesfully'
     let { edit } = req.body
+    console.log(bookId)
 
     try {
         let finder = await Books.findByIdAndUpdate(bookId, { edit })
-        if (finder) return res.send(response)
-
     }
     catch (err) { console.error(err) }
 }
@@ -36,7 +34,6 @@ const handleEdit = async (req, res) => {
 const handleDone = async (req, res) => {
     let { bookId } = req.params
     let updateArea = { ...req.body }
-    let response = 'edited succesfully'
     try {
         let finder = await Books.findByIdAndUpdate(bookId, updateArea)
     }

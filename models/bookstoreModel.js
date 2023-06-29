@@ -1,4 +1,5 @@
-const { connect, Schema, model } = require('mongoose')
+const { connect, model, Schema } = require('mongoose')
+
 connect(process.env.MONGODB_URI)
     .then(res => console.log('success'))
     .catch(err => console.error(err))
@@ -8,6 +9,7 @@ let userSchema = new Schema({
     password: String
 })
 let Users = model('user', userSchema)
+
 let authorSchema = new Schema({
     name: {
         type: String,

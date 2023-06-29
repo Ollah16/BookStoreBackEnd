@@ -43,8 +43,8 @@ const handleUploader = async (req, res) => {
 const handleUploaderId = async (req, res) => {
     let { uploaderId } = req.params
     try {
-        let uploader = await Users.findById(uploaderId).select('username')
-        res.json({ uploader })
+        let uploaDee = await Users.findById(uploaderId).select("username")
+        res.json(uploaDee)
     }
     catch (err) { console.error(err) }
 }
@@ -58,4 +58,4 @@ const handleUser = async (req, res) => {
     catch (err) { console.error(err) }
 }
 
-module.exports = { handleUser, handleUploaderId, handleUploader, handleLogin, handleRegistration }
+module.exports = { handleUser, handleUploader, handleLogin, handleRegistration, handleUploaderId }
