@@ -1,12 +1,19 @@
 const { Books } = require('../models/bookstoreModel')
+const jwt = require("jsonwebtoken")
+
+
 const handleAddBook = async (req, res) => {
-    let { name, title, pageNumbers, descr, genre, edit, uploaderId } = req.body
-    try {
-        let newBook = Books({ name, title, pageNumbers, descr, genre, edit, uploaderId })
-        newBook.save()
-        res.send('Book added successfully')
+    let { name, title, pageNumbers, descr, genre, edit, myJwt } = req.body
+    let checkToken = jwt.verify(myJwt, jwtSecretKey)
+    if (checkToken) {
+        let { id } = checkToken
+        try {
+            let newBook = Books({ name, title, pageNumbers, descr, genre, edit, uploaderId: id })
+            newBook.save()
+            res.send('Book added successfully')
+        }
+        catch (err) { console.error(err) }
     }
-    catch (err) { console.error(err) }
 }
 
 const handleAllBooks = async (req, res) => {
@@ -22,13 +29,17 @@ const handleBookId = async (req, res) => {
 
 const handleEdit = async (req, res) => {
     let { bookId } = req.params
-    let { edit } = req.body
-    console.log(bookId)
-
+    let id = req.userId
     try {
-        let finder = await Books.findByIdAndUpdate(bookId, { edit })
+        let foundBook = await Books.findById(bookId)
+        if (foundBook.uploaderId == id) {
+            let editBook = await Books.findByIdAndUpdate(bookId, { edit: true })
+        }
+        else { res.send('permission not granted') }
     }
     catch (err) { console.error(err) }
+
+
 }
 
 const handleDone = async (req, res) => {
@@ -48,4 +59,16 @@ const handleDelete = async (req, res) => {
     catch (err) { console.error(err) }
 }
 
-module.exports = { handleDelete, handleDone, handleEdit, handleAllBooks, handleBookId, handleAddBook }
+const handleSearch = async (req, res) => {
+    let { bookName } = req.body
+    try {
+        let searchedBook = await Books.findOne({ title: bookName })
+        if (searchedBook) return res.json({ searchedBook })
+        return res.json('Book Does Not Exist')
+    }
+    catch (err) {
+        console.error(err)
+    }
+}
+
+module.exports = { handleDelete, handleDone, handleEdit, handleAllBooks, handleBookId, handleAddBook, handleSearch }
