@@ -17,7 +17,7 @@ const handleRegistration = async (req, res) => {
             if (userDetail) {
                 let { id, username } = userDetail
                 let accessToken = jwt.sign({ id }, jwtSecretKey)
-                res.json({ accessToken, username })
+                res.json({ accessToken, username, id })
             }
         }
         catch (error) {
@@ -36,7 +36,7 @@ const handleLogin = async (req, res) => {
         if (comparePass) {
             let { username, id } = userDetail
             let accessToken = jwt.sign({ id }, jwtSecretKey)
-            res.json({ accessToken, username })
+            res.json({ accessToken, username, id })
         }
 
         else { res.send('') }

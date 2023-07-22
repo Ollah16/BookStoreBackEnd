@@ -29,11 +29,20 @@ const handleBookId = async (req, res) => {
 
 const handleEdit = async (req, res) => {
     let { bookId } = req.params
-    let id = req.userId
+    let { id } = req.userId
     try {
         let foundBook = await Books.findById(bookId)
+
         if (foundBook.uploaderId == id) {
-            let editBook = await Books.findByIdAndUpdate(bookId, { edit: true })
+            let bookToEdit = await Books.findById(bookId)
+            if (bookToEdit.edit) {
+                let editBook = await Books.findByIdAndUpdate(bookId, { edit: false })
+                res.send('granted')
+            }
+            else {
+                let editBook = await Books.findByIdAndUpdate(bookId, { edit: true })
+                res.send('granted')
+            }
         }
         else { res.send('permission not granted') }
     }
