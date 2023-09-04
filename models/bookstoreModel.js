@@ -8,6 +8,7 @@ let userSchema = new Schema({
     username: String,
     password: String
 })
+
 let Users = model('user', userSchema)
 
 let authorSchema = new Schema({

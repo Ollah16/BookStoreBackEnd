@@ -1,4 +1,4 @@
-require('dotenv').config();
+if (process.NODE_ENV != 'production') { require('dotenv').config(); }
 const express = require("express");
 const app = express();
 const cors = require('cors');
@@ -8,5 +8,6 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use("/user", user);
 app.use("/store", store);
-app.listen(process.env.PORT, () => {
+const port = process.env.PORT || 8600
+app.listen(, () => {
 });
