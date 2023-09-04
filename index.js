@@ -9,5 +9,5 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/user", user);
 app.use("/store", store);
 const port = process.env.PORT || 8600
-app.listen(, () => {
+app.listen(port, () => {
 });
