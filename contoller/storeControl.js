@@ -26,7 +26,7 @@ const handleBookId = async (req, res) => {
     let foundBook = await Books.findById(bookId)
     let bookUploader = await Users.findById(foundBook.uploaderId)
     let { username } = bookUploader
-    let { name, title, pageNumbers, descr, genre, edit, uploaderId } = foundBook
+    let { name, title, pageNumbers, descr, genre, edit, uploaderId, _id } = foundBook
     let foundBookDetails = { username, name, title, pageNumbers, descr, genre, edit, uploaderId }
     res.json({ foundBookDetails })
 }
