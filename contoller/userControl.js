@@ -8,17 +8,11 @@ const handleRegistration = async (req, res) => {
     let salt = await bcrypt.genSalt()
     let myPass = await bcrypt.hash(password, salt)
     let myCheck = await Users.findOne({ username })
-
     if (!myCheck) {
         try {
             let newAuthor = Users({ username, password: myPass })
             newAuthor.save();
-            let userDetail = await Users.findOne({ username: username })
-            if (userDetail) {
-                let { id, username } = userDetail
-                let accessToken = jwt.sign({ id }, jwtSecretKey)
-                res.json({ accessToken, username, id })
-            }
+            res.send('registered')
         }
         catch (error) {
             console.error(error)
