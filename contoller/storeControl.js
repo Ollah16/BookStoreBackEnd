@@ -1,4 +1,4 @@
-const { Books } = require('../models/bookstoreModel')
+const { Books, Users } = require('../models/bookstoreModel')
 const jwt = require("jsonwebtoken")
 
 
@@ -24,7 +24,11 @@ const handleAllBooks = async (req, res) => {
 const handleBookId = async (req, res) => {
     let { bookId } = req.params
     let foundBook = await Books.findById(bookId)
-    res.json({ foundBook })
+    let bookUploader = await Users.findById(foundBook.uploaderId)
+    let { username } = bookUploader
+    let { name, title, pageNumbers, descr, genre, edit } = foundBook
+    let foundBookDetails = { username, name, title, pageNumbers, descr, genre, edit }
+    res.json({ foundBookDetails })
 }
 
 const handleEdit = async (req, res) => {
