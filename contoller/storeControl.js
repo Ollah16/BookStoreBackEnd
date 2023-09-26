@@ -10,7 +10,8 @@ const handleAddBook = async (req, res) => {
         try {
             let newBook = Books({ name, title, pageNumbers, descr, genre, edit, uploaderId: id })
             newBook.save()
-            res.send('Book added successfully')
+            let myUploads = Books.find({ uploaderId: id })
+            res.json({ myUploads })
         }
         catch (err) { console.error(err) }
     }
