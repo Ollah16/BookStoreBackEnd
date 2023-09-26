@@ -1,20 +1,17 @@
 const { Books, Users } = require('../models/bookstoreModel')
 const jwt = require("jsonwebtoken")
-
+const jwtSecretKey = process.env.MyJwt
 
 const handleAddBook = async (req, res) => {
-    let { name, title, pageNumbers, descr, genre, edit, myJwt } = req.body
-    let checkToken = jwt.verify(myJwt, jwtSecretKey)
-    if (checkToken) {
-        let { id } = checkToken
-        try {
-            let newBook = Books({ name, title, pageNumbers, descr, genre, edit, uploaderId: id })
-            newBook.save()
-            let myUploads = Books.find({ uploaderId: id })
-            res.json({ myUploads })
-        }
-        catch (err) { console.error(err) }
+    let { id } = req.userId
+    let { name, title, pageNumbers, descr, genre, edit } = req.body
+    try {
+        let newBook = await Books({ name, title, pageNumbers, descr, genre, edit, uploaderId: id })
+        newBook.save()
+        let myUploads = await Books.find({ uploaderId: id })
+        res.json({ myUploads })
     }
+    catch (err) { console.error(err) }
 }
 
 const handleAllBooks = async (req, res) => {

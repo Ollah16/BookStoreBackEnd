@@ -17,7 +17,7 @@ const jwtMiddleWare = async (req, res, next) => {
     }
 }
 
-router.post("/addbook", handleAddBook)
+router.post("/addbook", jwtMiddleWare, handleAddBook)
 
 router.get("/allbooks", handleAllBooks)
 
