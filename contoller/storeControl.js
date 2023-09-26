@@ -23,8 +23,8 @@ const handleAllBooks = async (req, res) => {
 
 const handleBookId = async (req, res) => {
     let { bookId } = req.params
-    let finder = await Books.findById(bookId)
-    res.json({ finder })
+    let foundBook = await Books.findById(bookId)
+    res.json({ foundBook })
 }
 
 const handleEdit = async (req, res) => {
