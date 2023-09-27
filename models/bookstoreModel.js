@@ -20,8 +20,8 @@ let authorSchema = new Schema({
         type: String,
         required: true
     },
-    pageNumbers: {
-        type: String,
+    bookpages: {
+        type: Number,
         required: true
     },
     bookDescr: {

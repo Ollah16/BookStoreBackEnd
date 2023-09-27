@@ -1,6 +1,4 @@
 const { Books, Users } = require('../models/bookstoreModel')
-const jwt = require("jsonwebtoken")
-const jwtSecretKey = process.env.MyJwt
 
 const handleAddBook = async (req, res) => {
     let { id } = req.userId
