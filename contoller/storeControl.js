@@ -33,7 +33,7 @@ const handleEditBook = async (req, res) => {
     const { bookId } = req.params
     const { id } = req.userId
     try {
-        await Books.findByIdAndUpdate(bookId, { edit: false })
+        await Books.findByIdAndUpdate(bookId, { edit: true })
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
     }
@@ -45,7 +45,7 @@ const handleCancel = async (req, res) => {
     const { bookId } = req.params
     const { id } = req.userId
     try {
-        await Books.findByIdAndUpdate(bookId, { edit: true })
+        await Books.findByIdAndUpdate(bookId, { edit: false })
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
     }
