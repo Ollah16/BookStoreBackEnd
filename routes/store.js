@@ -1,5 +1,5 @@
 const express = require('express')
-const { handleAddBook, handleAllBooks, handleBookId, handleEdit, handleDone, handleDelete, handleSearch, handleEditBook, handleSaveChanges, handleCancel } = require('../contoller/storeControl')
+const { handleAddBook, handleAllBooks, handleBookId, handleEdit, handleDone, handleDelete, handleSearch, handleEditBook, handleSaveChanges, handleCancel, handleViewMore } = require('../contoller/storeControl')
 const router = express.Router()
 const jwt = require("jsonwebtoken")
 const jwtSecretKey = process.env.MyJwt
@@ -19,7 +19,7 @@ const jwtMiddleWare = async (req, res, next) => {
 
 router.post("/addbook", jwtMiddleWare, handleAddBook)
 router.get("/allbooks", handleAllBooks)
-router.get("/viewmore/:bookId", handleBookId)
+router.get("/viewmore/:bookId", handleViewMore)
 router.delete("/delete/:bookId", jwtMiddleWare, handleDelete)
 router.patch("/edit/:bookId", jwtMiddleWare, handleEditBook)
 router.patch("/save/:bookId", jwtMiddleWare, handleSaveChanges)

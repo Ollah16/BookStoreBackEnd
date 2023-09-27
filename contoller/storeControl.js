@@ -19,7 +19,7 @@ const handleAllBooks = async (req, res) => {
     res.json({ allbooks })
 }
 
-const handleBookId = async (req, res) => {
+const handleViewMore = async (req, res) => {
     let { bookId } = req.params
     let foundBook = await Books.findById(bookId)
     let bookUploader = await Users.findById(foundBook.uploaderId)
@@ -35,7 +35,7 @@ const handleEditBook = async (req, res) => {
     try {
         await Books.findByIdAndUpdate(bookId, { edit: false })
         let myUploads = await Books.find({ uploaderId: id })
-        res.json(myUploads)
+        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 
@@ -47,7 +47,7 @@ const handleCancel = async (req, res) => {
     try {
         await Books.findByIdAndUpdate(bookId, { edit: true })
         let myUploads = await Books.find({ uploaderId: id })
-        res.json(myUploads)
+        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 
@@ -62,7 +62,7 @@ const handleSaveChanges = async (req, res) => {
     try {
         await Books.findByIdAndUpdate(bookId, newData)
         let myUploads = await Books.find({ uploaderId: id })
-        res.json(myUploads)
+        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 }
@@ -73,7 +73,7 @@ const handleDelete = async (req, res) => {
     try {
         await Books.findByIdAndRemove(bookId)
         let myUploads = await Books.find({ uploaderId: id })
-        res.json(myUploads)
+        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 }
@@ -90,4 +90,4 @@ const handleSearch = async (req, res) => {
     }
 }
 
-module.exports = { handleDelete, handleSaveChanges, handleEditBook, handleCancel, handleAllBooks, handleBookId, handleAddBook, handleSearch }
+module.exports = { handleDelete, handleSaveChanges, handleEditBook, handleCancel, handleAllBooks, handleViewMore, handleAddBook, handleSearch }
