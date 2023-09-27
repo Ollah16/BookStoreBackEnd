@@ -61,11 +61,11 @@ const handleSaveChanges = async (req, res) => {
     const { bookId } = req.params
     const { data } = req.body
     const { id } = req.userId
+    const { authorName, bookTitle, bookpages, bookGenre, bookDescr } = data
+    const newBook = { editBook: false, authorName, bookTitle, bookpages, bookGenre, bookDescr }
     try {
-        let bookData = await Books.findById(bookId)
-        let { authorName, bookTitle, bookpages, bookGenre, bookDescr } = data
-        let newBookData = { ...bookData, authorName, bookTitle, bookpages, bookGenre, bookDescr }
-        await Books.findByIdAndUpdate(bookId, newBookData)
+        await Books.findById(bookId)
+        await Books.findByIdAndUpdate(bookId, newBook)
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
     }
@@ -76,7 +76,7 @@ const handleDelete = async (req, res) => {
     const { bookId } = req.params
     const { id } = req.userId
     try {
-        let deletedBook = await Books.findByIdAndDelete(bookId)
+        await Books.findByIdAndDelete(bookId)
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
     }
