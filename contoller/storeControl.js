@@ -76,7 +76,7 @@ const handleDelete = async (req, res) => {
     const { bookId } = req.params
     const { id } = req.userId
     try {
-        await Books.findByIdAndRemove(bookId)
+        await Books.findByIdAndDelete(bookId)
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
     }
