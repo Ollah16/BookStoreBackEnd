@@ -24,6 +24,6 @@ router.delete("/delete/:bookId", jwtMiddleWare, handleDelete)
 router.patch("/edit/:bookId", jwtMiddleWare, handleEditBook)
 router.patch("/save/:bookId", jwtMiddleWare, handleSaveChanges)
 router.patch('/cancel/:bookId', jwtMiddleWare, handleCancel)
-router.post("/searchBook/:bookTitle", handleSearch)
+router.get("/searchBook/:bookTitle", handleSearch)
 
 module.exports = router
