@@ -5,36 +5,41 @@ const jwtSecretKey = process.env.MyJwt
 
 const handleRegistration = async (req, res) => {
     let { username, password } = req.body
-    let salt = await bcrypt.genSalt()
-    let myPass = await bcrypt.hash(password, salt)
-    let myCheck = await Users.findOne({ username })
-    if (!myCheck) {
-        try {
+    try {
+        let salt = await bcrypt.genSalt()
+        let myPass = await bcrypt.hash(password, salt)
+        let myCheck = await Users.findOne({ username })
+        if (!myCheck) {
+
             let newAuthor = Users({ username, password: myPass })
             newAuthor.save();
             res.send('registered')
+
         }
-        catch (error) {
-            console.error(error)
-        }
+        else { res.send('User Already Exist') }
     }
-    else { res.send('User Already Exist') }
+    catch (error) {
+        console.error(error)
+    }
 }
 
 
 const handleLogin = async (req, res) => {
     let { username, password } = req.body
-    let userDetail = await Users.findOne({ username })
-    if (userDetail) {
-        let comparePass = await bcrypt.compare(password, userDetail.password)
-        if (comparePass) {
-            let { username, id } = userDetail
-            let accessToken = jwt.sign({ id }, jwtSecretKey)
-            res.json({ accessToken, username, id })
-        }
+    try {
+        let userDetail = await Users.findOne({ username })
+        if (userDetail) {
+            let comparePass = await bcrypt.compare(password, userDetail.password)
+            if (comparePass) {
+                let { username, id } = userDetail
+                let accessToken = jwt.sign({ id }, jwtSecretKey)
+                res.json({ accessToken, username, id })
+            }
 
-        else { res.send('') }
+            else { res.send('') }
+        }
     }
+    catch (err) { console.error(err) }
 }
 
 const handleMyUploads = async (req, res) => {
