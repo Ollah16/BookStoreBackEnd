@@ -29,43 +29,51 @@ const handleBookId = async (req, res) => {
     res.json({ foundBookDetails })
 }
 
-const handleEdit = async (req, res) => {
-    let { bookId } = req.params
-    let { id } = req.userId
+const handleEditBook = async (req, res) => {
+    const { bookId } = req.params
+    const { id } = req.userId
     try {
-        let foundBook = await Books.findById(bookId)
-
-        if (foundBook.uploaderId == id) {
-            let bookToEdit = await Books.findById(bookId)
-            if (bookToEdit.edit) {
-                let editBook = await Books.findByIdAndUpdate(bookId, { edit: false })
-                res.send('granted')
-            }
-            else {
-                let editBook = await Books.findByIdAndUpdate(bookId, { edit: true })
-                res.send('granted')
-            }
-        }
-        else { res.send('permission not granted') }
+        await Books.findByIdAndUpdate(bookId, { edit: false })
+        let myUploads = await Books.find({ uploaderId: id })
+        res.json(myUploads)
     }
     catch (err) { console.error(err) }
 
+}
+
+const handleCancel = async (req, res) => {
+    const { bookId } = req.params
+    const { id } = req.userId
+    try {
+        await Books.findByIdAndUpdate(bookId, { edit: true })
+        let myUploads = await Books.find({ uploaderId: id })
+        res.json(myUploads)
+    }
+    catch (err) { console.error(err) }
 
 }
 
-const handleDone = async (req, res) => {
-    let { bookId } = req.params
-    let updateArea = { ...req.body }
+const handleSaveChanges = async (req, res) => {
+    const { bookId } = req.params
+    const { data } = req.body
+    const { id } = req.userId
+    let { name, title, descr, pageNumbers, genre } = data
+    let newData = { name, title, descr, pageNumbers, genre }
     try {
-        let finder = await Books.findByIdAndUpdate(bookId, updateArea)
+        await Books.findByIdAndUpdate(bookId, newData)
+        let myUploads = await Books.find({ uploaderId: id })
+        res.json(myUploads)
     }
     catch (err) { console.error(err) }
 }
 
 const handleDelete = async (req, res) => {
-    let { delId } = req.params
+    const { bookId } = req.params
+    const { id } = req.userId
     try {
-        let uploader = await Books.findByIdAndRemove(delId)
+        await Books.findByIdAndRemove(bookId)
+        let myUploads = await Books.find({ uploaderId: id })
+        res.json(myUploads)
     }
     catch (err) { console.error(err) }
 }
@@ -82,4 +90,4 @@ const handleSearch = async (req, res) => {
     }
 }
 
-module.exports = { handleDelete, handleDone, handleEdit, handleAllBooks, handleBookId, handleAddBook, handleSearch }
+module.exports = { handleDelete, handleSaveChanges, handleEditBook, handleCancel, handleAllBooks, handleBookId, handleAddBook, handleSearch }
