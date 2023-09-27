@@ -12,11 +12,11 @@ let userSchema = new Schema({
 let Users = model('user', userSchema)
 
 let authorSchema = new Schema({
-    name: {
+    authorName: {
         type: String,
         required: true
     },
-    title: {
+    bookTitle: {
         type: String,
         required: true
     },
@@ -24,15 +24,15 @@ let authorSchema = new Schema({
         type: String,
         required: true
     },
-    descr: {
+    bookDescr: {
         type: String,
         required: true
     },
-    genre: {
+    bookGenre: {
         type: String,
         required: true
     },
-    edit: {
+    editBook: {
         type: Boolean,
     },
     uploaderId: {

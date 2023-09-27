@@ -37,25 +37,7 @@ const handleLogin = async (req, res) => {
     }
 }
 
-const handleUploader = async (req, res) => {
-    let { userId } = req.params
-    try {
-        let userName = await Users.findById(userId).select('username')
-        res.json({ userName })
-    }
-    catch (err) { console.error(err) }
-}
-
-const handleUploaderId = async (req, res) => {
-    let { uploaderId } = req.params
-    try {
-        let uploaDee = await Users.findById(uploaderId).select("username")
-        res.json(uploaDee)
-    }
-    catch (err) { console.error(err) }
-}
-
-const handleUserUploads = async (req, res) => {
+const handleMyUploads = async (req, res) => {
     let { id } = req.userId
     try {
         let myUploads = await Books.find({ uploaderId: id })
@@ -64,4 +46,4 @@ const handleUserUploads = async (req, res) => {
     catch (err) { console.error(err) }
 }
 
-module.exports = { handleUserUploads, handleUploader, handleLogin, handleRegistration, handleUploaderId }
+module.exports = { handleMyUploads, handleLogin, handleRegistration }

@@ -1,5 +1,5 @@
 const express = require('express');
-const { handleLogin, handleUploader, handleUserUploads, handleRegistration, handleUploaderId, handleUserId } = require('../contoller/userControl');
+const { handleLogin, handleUploader, handleUserUploads, handleRegistration, handleUploaderId, handleUserId, handleMyUploads } = require('../contoller/userControl');
 const router = express.Router()
 const jwt = require("jsonwebtoken")
 const jwtSecretKey = process.env.MyJwt
@@ -21,10 +21,6 @@ router.post("/register", handleRegistration);
 
 router.post("/login", handleLogin);
 
-router.get("/fetchuploader/:userId", handleUploader)
-
-router.get("/uploader/:uploaderId", handleUploaderId)
-
-router.get("/fetchuserUploads", jwtMiddleWare, handleUserUploads)
+router.get("/fetchuserUploads", jwtMiddleWare, handleMyUploads)
 
 module.exports = router; 

@@ -4,9 +4,9 @@ const jwtSecretKey = process.env.MyJwt
 
 const handleAddBook = async (req, res) => {
     let { id } = req.userId
-    let { name, title, pageNumbers, descr, genre, edit } = req.body
+    let { authorName, bookTitle, bookpages, bookGenre, bookDescr, editBook } = req.body
     try {
-        let newBook = await Books({ name, title, pageNumbers, descr, genre, edit, uploaderId: id })
+        let newBook = await Books({ authorName, bookTitle, bookpages, bookGenre, bookDescr, editBook, uploaderId: id })
         newBook.save()
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
@@ -15,25 +15,31 @@ const handleAddBook = async (req, res) => {
 }
 
 const handleAllBooks = async (req, res) => {
-    let allbooks = await Books.find({})
-    res.json({ allbooks })
+    try {
+        let allbooks = await Books.find({})
+        res.json({ allbooks })
+    }
+    catch (err) { console.error(err) }
 }
 
 const handleViewMore = async (req, res) => {
     let { bookId } = req.params
-    let foundBook = await Books.findById(bookId)
-    let bookUploader = await Users.findById(foundBook.uploaderId)
-    let { username } = bookUploader
-    let { name, title, pageNumbers, descr, genre, edit, uploaderId, _id } = foundBook
-    let foundBookDetails = { username, name, title, pageNumbers, descr, genre, edit, uploaderId }
-    res.json({ foundBookDetails })
+    try {
+        let foundBook = await Books.findById(bookId)
+        let Uploadedby = await Users.findById(foundBook.uploaderId)
+        let { username } = Uploadedby
+        let { authorName, bookTitle, bookpages, bookGenre, bookDescr, uploaderId } = foundBook
+        let foundBookDetails = { username, authorName, bookTitle, bookpages, bookGenre, bookDescr, uploaderId }
+        res.json({ foundBookDetails })
+    }
+    catch (err) { console.error(err) }
 }
 
 const handleEditBook = async (req, res) => {
     const { bookId } = req.params
     const { id } = req.userId
     try {
-        await Books.findByIdAndUpdate(bookId, { edit: true })
+        await Books.findByIdAndUpdate(bookId, { editBook: true })
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
     }
@@ -45,7 +51,7 @@ const handleCancel = async (req, res) => {
     const { bookId } = req.params
     const { id } = req.userId
     try {
-        await Books.findByIdAndUpdate(bookId, { edit: false })
+        await Books.findByIdAndUpdate(bookId, { editBook: false })
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
     }
@@ -57,10 +63,11 @@ const handleSaveChanges = async (req, res) => {
     const { bookId } = req.params
     const { data } = req.body
     const { id } = req.userId
-    let { name, title, descr, pageNumbers, genre } = data
-    let newData = { name, title, descr, pageNumbers, genre }
     try {
-        await Books.findByIdAndUpdate(bookId, newData)
+        let bookData = await Books.findById(bookId)
+        let { authorName, bookTitle, bookpages, bookGenre, bookDescr } = data
+        let newBookData = { ...bookData, authorName, bookTitle, bookpages, bookGenre, bookDescr }
+        await Books.findByIdAndUpdate(bookId, newBookData)
         let myUploads = await Books.find({ uploaderId: id })
         res.json({ myUploads })
     }
@@ -79,9 +86,9 @@ const handleDelete = async (req, res) => {
 }
 
 const handleSearch = async (req, res) => {
-    let { bookName } = req.body
+    let { bookTitle } = req.params
     try {
-        let searchedBook = await Books.findOne({ title: bookName })
+        let searchedBook = await Books.findOne({ bookTitle })
         if (searchedBook) return res.json({ searchedBook })
         return res.json('Book Does Not Exist')
     }
