@@ -75,7 +75,7 @@ const handleSearch = async (req, res) => {
     const { bookTitle } = req.params;
     try {
         const searchedBook = await Books.findOne({
-            title: { $regex: new RegExp(bookTitle, 'i') },
+            bookTitle: { $regex: new RegExp(bookTitle, 'i') },
         });
         if (searchedBook) {
             return res.json({ searchedBook });
