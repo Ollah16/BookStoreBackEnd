@@ -12,8 +12,8 @@ const handleAddBook = async (req, res) => {
 
 const handleAllBooks = async (req, res) => {
     try {
-        let allbooks = await Books.find({})
-        res.json({ allbooks })
+        const allBooks = await Books.find({})
+        res.json({ allBooks })
     }
     catch (err) { console.error(err) }
 }
