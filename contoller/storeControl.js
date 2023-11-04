@@ -6,8 +6,6 @@ const handleAddBook = async (req, res) => {
     try {
         let newBook = await Books({ authorName, bookTitle, bookpages, bookGenre, bookDescr, editBook, uploaderId: id })
         newBook.save()
-        let myUploads = await Books.find({ uploaderId: id })
-        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 }
@@ -21,14 +19,14 @@ const handleAllBooks = async (req, res) => {
 }
 
 const handleViewMore = async (req, res) => {
-    let { bookId } = req.params
+    const { bookId } = req.params
     try {
-        let foundBook = await Books.findById(bookId)
-        let Uploadedby = await Users.findById(foundBook.uploaderId)
-        let { username } = Uploadedby
-        let { authorName, bookTitle, bookpages, bookGenre, bookDescr, uploaderId } = foundBook
-        let foundBookDetails = { username, authorName, bookTitle, bookpages, bookGenre, bookDescr, uploaderId }
-        res.json({ foundBookDetails })
+        const book = await Books.findById(bookId)
+        const uploader = await Users.findById(book.uploaderId)
+        const { username } = uploader
+        const { authorName, bookTitle, bookpages, bookGenre, bookDescr } = book
+        const viewedBook = { username, authorName, bookTitle, bookpages, bookGenre, bookDescr }
+        res.json({ viewedBook })
     }
     catch (err) { console.error(err) }
 }
@@ -38,8 +36,6 @@ const handleEditBook = async (req, res) => {
     const { id } = req.userId
     try {
         await Books.findByIdAndUpdate(bookId, { editBook: true })
-        let myUploads = await Books.find({ uploaderId: id })
-        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 
@@ -50,8 +46,6 @@ const handleCancel = async (req, res) => {
     const { id } = req.userId
     try {
         await Books.findByIdAndUpdate(bookId, { editBook: false })
-        let myUploads = await Books.find({ uploaderId: id })
-        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 
@@ -60,14 +54,10 @@ const handleCancel = async (req, res) => {
 const handleSaveChanges = async (req, res) => {
     const { bookId } = req.params
     const { data } = req.body
-    const { id } = req.userId
     const { authorName, bookTitle, bookpages, bookGenre, bookDescr } = data
     const newBook = { editBook: false, authorName, bookTitle, bookpages, bookGenre, bookDescr }
     try {
-        await Books.findById(bookId)
         await Books.findByIdAndUpdate(bookId, newBook)
-        let myUploads = await Books.find({ uploaderId: id })
-        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 }
@@ -77,22 +67,24 @@ const handleDelete = async (req, res) => {
     const { id } = req.userId
     try {
         await Books.findByIdAndDelete(bookId)
-        let myUploads = await Books.find({ uploaderId: id })
-        res.json({ myUploads })
     }
     catch (err) { console.error(err) }
 }
 
 const handleSearch = async (req, res) => {
-    let { bookTitle } = req.params
+    const { bookTitle } = req.params;
     try {
-        let searchedBook = await Books.findOne({ bookTitle })
-        if (searchedBook) return res.json({ searchedBook })
-        return res.json('Book Does Not Exist')
+        const searchedBook = await Books.findOne({
+            title: { $regex: new RegExp(bookTitle, 'i') },
+        });
+        if (searchedBook) {
+            return res.json({ searchedBook });
+        }
+        return res.json({ message: 'Book Does Not Exist' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while searching for the book.' });
     }
-    catch (err) {
-        console.error(err)
-    }
-}
+};
 
 module.exports = { handleDelete, handleSaveChanges, handleEditBook, handleCancel, handleAllBooks, handleViewMore, handleAddBook, handleSearch }

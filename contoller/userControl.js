@@ -10,13 +10,12 @@ const handleRegistration = async (req, res) => {
         let myPass = await bcrypt.hash(password, salt)
         let myCheck = await Users.findOne({ username })
         if (!myCheck) {
-
             let newAuthor = Users({ username, password: myPass })
             newAuthor.save();
-            res.send('registered')
+            res.json({ message: 'Registration successful' })
 
         }
-        else { res.send('User Already Exist') }
+        else { res.json({ message: 'User Already Exist' }) }
     }
     catch (error) {
         console.error(error)
@@ -27,17 +26,17 @@ const handleRegistration = async (req, res) => {
 const handleLogin = async (req, res) => {
     let { username, password } = req.body
     try {
-        let userDetail = await Users.findOne({ username })
-        if (userDetail) {
-            let comparePass = await bcrypt.compare(password, userDetail.password)
-            if (comparePass) {
-                let { username, id } = userDetail
-                let accessToken = jwt.sign({ id }, jwtSecretKey)
-                res.json({ accessToken, username, id })
+        const user = await Users.findOne({ username })
+        if (user) {
+            const comparePassword = await bcrypt.compare(password, user.password)
+            if (comparePassword) {
+                const { username, id } = user
+                const accessToken = jwt.sign({ id }, jwtSecretKey)
+                res.json({ accessToken, username })
             }
-
-            else { res.send('') }
+            else { res.json({ message: 'Incorrect Password Or Username' }) }
         }
+        else { res.json({ message: 'User does not exist' }) }
     }
     catch (err) { console.error(err) }
 }
