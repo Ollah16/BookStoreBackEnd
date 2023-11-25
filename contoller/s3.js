@@ -8,8 +8,9 @@ exports.handleS3Upload = async (req, res) => {
         Body: req.buffer,
     };
     try {
+
         await s3Client.send(new PutObjectCommand(param))
-        res.status(200).send('File uploaded successfully');
+
     } catch (error) {
         console.error('Error uploading file:', error);
     }
