@@ -87,7 +87,6 @@ const handleSaveChanges = async (req, res) => {
 
     }
     catch (err) {
-        res.status(500).send('error saving', err.message)
         console.error(err)
     }
 }
