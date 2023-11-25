@@ -4,12 +4,14 @@ const { handleS3Upload } = require('./s3')
 const handleAddBook = async (req, res) => {
     let { id } = req.userId
     let { author, title, image, genre, description } = req.body
+
     console.log(req.file)
+
     handleS3Upload(req.file)
 
     try {
         let newBook = await Books({ author, title, image, genre, description, edit: false, uploaderId: id })
-        newBook.save()
+        await newBook.save()
     }
     catch (err) { console.error(err) }
 }
