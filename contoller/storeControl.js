@@ -37,7 +37,7 @@ const handleViewMore = async (req, res) => {
     catch (err) { console.error(err) }
 }
 
-const handleedit = async (req, res) => {
+const handleBookEdit = async (req, res) => {
     const { bookId } = req.params
     try {
         await Books.findByIdAndUpdate(bookId, { edit: true })
@@ -81,7 +81,7 @@ const handleDelete = async (req, res) => {
 
     const bookName = await Books.findById(bookId)
 
-    await handleS3Delete({ cover: bookName.cover })
+    // handleS3Delete({ cover: bookName.cover })
 
     try {
         await Books.findByIdAndDelete(bookId)
@@ -107,9 +107,9 @@ const handleSearch = async (req, res) => {
 };
 
 module.exports = {
+    handleBookEdit,
     handleDelete,
     handleSaveChanges,
-    handleedit,
     handleCancel,
     handleAllBooks,
     handleViewMore,

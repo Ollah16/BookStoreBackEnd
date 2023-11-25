@@ -3,10 +3,10 @@ const { handleAddBook,
     handleAllBooks,
     handleDelete,
     handleSearch,
-    handleEditBook,
     handleSaveChanges,
     handleCancel,
-    handleViewMore } = require('../contoller/storeControl')
+    handleViewMore,
+    handleBookEdit } = require('../contoller/storeControl')
 
 const router = express.Router()
 const jwt = require("jsonwebtoken")
@@ -40,7 +40,7 @@ router.post("/addbook", jwtMiddleWare, upload.single('cover'), handleAddBook)
 router.get("/allbooks", handleAllBooks)
 router.get("/viewmore/:bookId", handleViewMore)
 router.delete("/delete/:bookId", jwtMiddleWare, handleDelete)
-router.patch("/edit/:bookId", jwtMiddleWare, handleEditBook)
+router.patch("/edit/:bookId", jwtMiddleWare, handleBookEdit)
 router.patch("/save/:bookId", jwtMiddleWare, upload.single('cover'), handleSaveChanges)
 router.patch('/cancel/:bookId', jwtMiddleWare, handleCancel)
 router.get("/searchBook/:bookTitle", handleSearch)
