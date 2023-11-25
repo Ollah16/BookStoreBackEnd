@@ -98,8 +98,7 @@ const handleDelete = async (req, res) => {
 
     try {
         const bookName = await Books.findById(bookId)
-        console.log(bookName)
-        // handleS3Delete({ cover: bookName.cover })
+        handleS3Delete({ cover: bookName.cover })
         await Books.findByIdAndDelete(bookId)
         let userUploads = await Books.find({ uploaderId: id })
         res.status(200).json({ userUploads })
