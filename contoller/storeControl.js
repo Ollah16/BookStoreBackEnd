@@ -61,16 +61,21 @@ const handleCancel = async (req, res) => {
 const handleSaveChanges = async (req, res) => {
     const { bookId } = req.params
     const { data } = req.body
-    const { author, title, cover, genre, description } = data
+    const { author, title, genre, description } = data
     const bookName = await Books.findById(bookId)
-
-    await handleS3Delete({ cover: bookName.cover })
-
-    handleS3Upload(req.file)
-
-    const newBook = { edit: false, author, title, cover, genre, description }
     try {
-        await Books.findByIdAndUpdate(bookId, newBook)
+
+        if (req.file) {
+            await handleS3Delete({ cover: bookName.cover })
+            handleS3Upload(req.file)
+            const newBook = { author, title, cover: req.file.originalname, genre, description }
+            await Books.findByIdAndUpdate(bookId, newBook)
+            return
+        }
+        else {
+            const newBook = { author, title, genre, description }
+            await Books.findByIdAndUpdate(bookId, newBook)
+        }
 
     }
     catch (err) { console.error(err) }
@@ -81,7 +86,7 @@ const handleDelete = async (req, res) => {
 
     const bookName = await Books.findById(bookId)
 
-    // handleS3Delete({ cover: bookName.cover })
+    handleS3Delete({ cover: bookName.cover })
 
     try {
         await Books.findByIdAndDelete(bookId)
