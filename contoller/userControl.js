@@ -43,9 +43,10 @@ const handleLogin = async (req, res) => {
 
 const handleMyUploads = async (req, res) => {
     let { id } = req.userId
+
     try {
-        let myUploads = await Books.find({ uploaderId: id })
-        res.json({ myUploads })
+        let userUploads = await Books.find({ uploaderId: id })
+        res.json({ userUploads })
     }
     catch (err) { console.error(err) }
 }
