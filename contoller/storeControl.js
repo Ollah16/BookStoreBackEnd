@@ -83,26 +83,25 @@ const handleSaveChanges = async (req, res) => {
         }
 
         let userUploads = await Books.find({ uploaderId: id })
-        res.json({ userUploads })
+        res.status(200).json({ userUploads })
 
     }
-    catch (err) { console.error(err) }
+    catch (err) {
+        res.status(500).send('error saving', err.message)
+        console.error(err)
+    }
 }
 
 const handleDelete = async (req, res) => {
     const { bookId } = req.params
     const { id } = req.userId
 
-    const bookName = await Books.findById(bookId)
-
-    handleS3Delete({ cover: bookName.cover })
-
     try {
+        const bookName = await Books.findById(bookId)
+        handleS3Delete({ cover: bookName.cover })
         await Books.findByIdAndDelete(bookId)
-
         let userUploads = await Books.find({ uploaderId: id })
-        res.json({ userUploads })
-
+        res.status(200).json({ userUploads })
     }
     catch (err) { console.error(err) }
 }
