@@ -36,12 +36,12 @@ const fileFilter = (req, file, cb) => {
 };
 const upload = multer({ storage, fileFilter })
 
-router.post("/addbook", jwtMiddleWare, upload.single('image'), handleAddBook)
+router.post("/addbook", jwtMiddleWare, upload.single('cover'), handleAddBook)
 router.get("/allbooks", handleAllBooks)
 router.get("/viewmore/:bookId", handleViewMore)
 router.delete("/delete/:bookId", jwtMiddleWare, handleDelete)
 router.patch("/edit/:bookId", jwtMiddleWare, handleEditBook)
-router.patch("/save/:bookId", jwtMiddleWare, handleSaveChanges)
+router.patch("/save/:bookId", jwtMiddleWare, upload.single('cover'), handleSaveChanges)
 router.patch('/cancel/:bookId', jwtMiddleWare, handleCancel)
 router.get("/searchBook/:bookTitle", handleSearch)
 

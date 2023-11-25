@@ -1,4 +1,4 @@
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3')
 
 exports.handleS3Upload = async (req, res) => {
     const s3Client = new S3Client();
@@ -11,5 +11,15 @@ exports.handleS3Upload = async (req, res) => {
         await s3Client.send(new PutObjectCommand(param))
     } catch (error) {
         console.error('Error uploading file:', error);
+    }
+};
+
+exports.handleS3Delete = async (req, res) => {
+    const s3Client = new S3Client();
+    try {
+        await s3Client.send(new DeleteObjectCommand({ Bucket: process.env.AWS_BUCKET_NAME, Key: req.cover }));
+        res.status(200).send('File deleted successfully');
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
     }
 };

@@ -20,7 +20,7 @@ let authorSchema = new Schema({
         type: String,
         required: true
     },
-    image: {
+    cover: {
         type: String,
         required: true
     },
