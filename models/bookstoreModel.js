@@ -12,23 +12,23 @@ let userSchema = new Schema({
 let Users = model('user', userSchema)
 
 let authorSchema = new Schema({
-    authorName: {
+    author: {
         type: String,
         required: true
     },
-    bookTitle: {
+    title: {
         type: String,
         required: true
     },
-    bookpages: {
-        type: Number,
-        required: true
-    },
-    bookDescr: {
+    image: {
         type: String,
         required: true
     },
-    bookGenre: {
+    description: {
+        type: String,
+        required: true
+    },
+    genre: {
         type: String,
         required: true
     },

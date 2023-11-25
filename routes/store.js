@@ -3,6 +3,7 @@ const { handleAddBook, handleAllBooks, handleBookId, handleEdit, handleDone, han
 const router = express.Router()
 const jwt = require("jsonwebtoken")
 const jwtSecretKey = process.env.MyJwt
+const multer = require('multer')
 
 const jwtMiddleWare = async (req, res, next) => {
     let { authorization } = req.headers
@@ -17,7 +18,19 @@ const jwtMiddleWare = async (req, res, next) => {
     }
 }
 
-router.post("/addbook", jwtMiddleWare, handleAddBook)
+const storage = multer.diskStorage()
+
+const fileFilter = (req, file, cb) => {
+    if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        req.error = { message: 'File not supported' };
+        cb(null, false);
+    }
+};
+const upload = multer({ storage, fileFilter })
+
+router.post("/addbook", jwtMiddleWare, upload.single('image'), handleAddBook)
 router.get("/allbooks", handleAllBooks)
 router.get("/viewmore/:bookId", handleViewMore)
 router.delete("/delete/:bookId", jwtMiddleWare, handleDelete)

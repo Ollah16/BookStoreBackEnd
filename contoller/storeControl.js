@@ -1,10 +1,14 @@
 const { Books, Users } = require('../models/bookstoreModel')
+const { handleS3Upload } = require('./s3')
 
 const handleAddBook = async (req, res) => {
     let { id } = req.userId
-    let { authorName, bookTitle, bookpages, bookGenre, bookDescr, editBook } = req.body
+    let { author, title, image, genre, description } = req.body
+
+    handleS3Upload(req.file)
+
     try {
-        let newBook = await Books({ authorName, bookTitle, bookpages, bookGenre, bookDescr, editBook, uploaderId: id })
+        let newBook = await Books({ author, title, image, genre, description, edit: false, uploaderId: id })
         newBook.save()
     }
     catch (err) { console.error(err) }
@@ -24,8 +28,8 @@ const handleViewMore = async (req, res) => {
         const book = await Books.findById(bookId)
         const uploader = await Users.findById(book.uploaderId)
         const { username } = uploader
-        const { authorName, bookTitle, bookpages, bookGenre, bookDescr } = book
-        const viewedBook = { username, authorName, bookTitle, bookpages, bookGenre, bookDescr }
+        const { author, title, image, genre, description } = book
+        const viewedBook = { username, author, title, image, genre, description }
         res.json({ viewedBook })
     }
     catch (err) { console.error(err) }
@@ -54,8 +58,8 @@ const handleCancel = async (req, res) => {
 const handleSaveChanges = async (req, res) => {
     const { bookId } = req.params
     const { data } = req.body
-    const { authorName, bookTitle, bookpages, bookGenre, bookDescr } = data
-    const newBook = { editBook: false, authorName, bookTitle, bookpages, bookGenre, bookDescr }
+    const { author, title, image, genre, description } = data
+    const newBook = { editBook: false, author, title, image, genre, description }
     try {
         await Books.findByIdAndUpdate(bookId, newBook)
     }
@@ -72,10 +76,10 @@ const handleDelete = async (req, res) => {
 }
 
 const handleSearch = async (req, res) => {
-    const { bookTitle } = req.params;
+    const { title } = req.params;
     try {
         const searchedBook = await Books.findOne({
-            bookTitle: { $regex: new RegExp(bookTitle, 'i') },
+            title: { $regex: new RegExp(title, 'i') }
         });
         if (searchedBook) {
             return res.json({ searchedBook });
