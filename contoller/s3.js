@@ -18,10 +18,16 @@ exports.handleS3Upload = async (req, res) => {
 
 exports.handleS3Delete = async (req, res) => {
     const s3Client = new S3Client();
+
     try {
-        await s3Client.send(new DeleteObjectCommand({ Bucket: process.env.AWS_BUCKET_NAME, Key: req.cover }));
-        res.status(200).send('File deleted successfully');
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: req.cover
+        };
+
+        await s3Client.send(new DeleteObject(params));
+
     } catch (error) {
-        res.status(500).send('Internal Server Error');
+        console.error('Error deleting file:', error);
     }
 };

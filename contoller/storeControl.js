@@ -70,7 +70,6 @@ const handleSaveChanges = async (req, res) => {
 
     const bookName = await Books.findById(bookId)
     try {
-
         if (req.file) {
             await handleS3Delete({ cover: bookName.cover })
             handleS3Upload(req.file)
