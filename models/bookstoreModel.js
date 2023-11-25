@@ -32,7 +32,7 @@ let authorSchema = new Schema({
         type: String,
         required: true
     },
-    editBook: {
+    edit: {
         type: Boolean,
     },
     uploaderId: {
