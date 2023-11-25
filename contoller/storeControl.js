@@ -9,6 +9,8 @@ const handleAddBook = async (req, res) => {
     try {
         let newBook = await Books({ author, title, cover: req.file.originalname, genre, description, edit: false, uploaderId: id })
         await newBook.save()
+        const allBooks = await Books.find({})
+        res.json({ allBooks })
     }
     catch (err) { console.error(err) }
 }
@@ -36,9 +38,10 @@ const handleViewMore = async (req, res) => {
 
 const handleEditBook = async (req, res) => {
     const { bookId } = req.params
-    const { id } = req.userId
     try {
         await Books.findByIdAndUpdate(bookId, { editBook: true })
+        const allBooks = await Books.find({})
+        res.json({ allBooks })
     }
     catch (err) { console.error(err) }
 
@@ -49,6 +52,8 @@ const handleCancel = async (req, res) => {
     const { id } = req.userId
     try {
         await Books.findByIdAndUpdate(bookId, { editBook: false })
+        const allBooks = await Books.find({})
+        res.json({ allBooks })
     }
     catch (err) { console.error(err) }
 
@@ -67,6 +72,8 @@ const handleSaveChanges = async (req, res) => {
     const newBook = { editBook: false, author, title, cover, genre, description }
     try {
         await Books.findByIdAndUpdate(bookId, newBook)
+        const allBooks = await Books.find({})
+        res.json({ allBooks })
     }
     catch (err) { console.error(err) }
 }
@@ -80,6 +87,8 @@ const handleDelete = async (req, res) => {
 
     try {
         await Books.findByIdAndDelete(bookId)
+        const allBooks = await Books.find({})
+        res.json({ allBooks })
     }
     catch (err) { console.error(err) }
 }
