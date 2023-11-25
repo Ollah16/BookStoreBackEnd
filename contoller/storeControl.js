@@ -3,7 +3,8 @@ const { handleS3Upload, handleS3Delete } = require('./s3')
 
 const handleAddBook = async (req, res) => {
     let { id } = req.userId
-    let { author, title, cover, genre, description, uploaderId } = req.body
+    let { author, title, cover, genre, description } = req.body
+
     handleS3Upload(req.file)
 
     try {
@@ -36,12 +37,11 @@ const handleViewMore = async (req, res) => {
     catch (err) { console.error(err) }
 }
 
-const handleEditBook = async (req, res) => {
+const handleedit = async (req, res) => {
     const { bookId } = req.params
     try {
-        await Books.findByIdAndUpdate(bookId, { editBook: true })
-        const allBooks = await Books.find({})
-        res.json({ allBooks })
+        await Books.findByIdAndUpdate(bookId, { edit: true })
+
     }
     catch (err) { console.error(err) }
 
@@ -51,9 +51,8 @@ const handleCancel = async (req, res) => {
     const { bookId } = req.params
     const { id } = req.userId
     try {
-        await Books.findByIdAndUpdate(bookId, { editBook: false })
-        const allBooks = await Books.find({})
-        res.json({ allBooks })
+        await Books.findByIdAndUpdate(bookId, { edit: false })
+
     }
     catch (err) { console.error(err) }
 
@@ -69,11 +68,10 @@ const handleSaveChanges = async (req, res) => {
 
     handleS3Upload(req.file)
 
-    const newBook = { editBook: false, author, title, cover, genre, description }
+    const newBook = { edit: false, author, title, cover, genre, description }
     try {
         await Books.findByIdAndUpdate(bookId, newBook)
-        const allBooks = await Books.find({})
-        res.json({ allBooks })
+
     }
     catch (err) { console.error(err) }
 }
@@ -87,8 +85,7 @@ const handleDelete = async (req, res) => {
 
     try {
         await Books.findByIdAndDelete(bookId)
-        const allBooks = await Books.find({})
-        res.json({ allBooks })
+
     }
     catch (err) { console.error(err) }
 }
@@ -112,7 +109,7 @@ const handleSearch = async (req, res) => {
 module.exports = {
     handleDelete,
     handleSaveChanges,
-    handleEditBook,
+    handleedit,
     handleCancel,
     handleAllBooks,
     handleViewMore,
