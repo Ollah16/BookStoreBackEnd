@@ -10,8 +10,6 @@ const handleAddBook = async (req, res) => {
     try {
         let newBook = await Books({ author, title, cover: req.file.originalname, genre, description, edit: false, uploaderId: id })
         await newBook.save()
-        const allBooks = await Books.find({})
-        res.json({ allBooks })
     }
     catch (err) { console.error(err) }
 }
