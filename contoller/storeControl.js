@@ -60,20 +60,20 @@ const handleCancel = async (req, res) => {
 
 const handleSaveChanges = async (req, res) => {
     const { bookId } = req.params
-    const { data } = req.body
-    const { author, title, genre, description } = data
+    const { author, title, genre, description } = req.body
+
     const bookName = await Books.findById(bookId)
     try {
 
         if (req.file) {
             await handleS3Delete({ cover: bookName.cover })
             handleS3Upload(req.file)
-            const newBook = { author, title, cover: req.file.originalname, genre, description }
+            const newBook = { author, title, cover: req.file.originalname, genre, description, edit: false }
             await Books.findByIdAndUpdate(bookId, newBook)
             return
         }
         else {
-            const newBook = { author, title, genre, description }
+            const newBook = { author, title, genre, description, edit: false }
             await Books.findByIdAndUpdate(bookId, newBook)
         }
 
