@@ -4,7 +4,7 @@ const { handleS3Upload } = require('./s3')
 const handleAddBook = async (req, res) => {
     let { id } = req.userId
     let { author, title, image, genre, description } = req.body
-
+    console.log(req.file)
     handleS3Upload(req.file)
 
     try {
@@ -91,4 +91,13 @@ const handleSearch = async (req, res) => {
     }
 };
 
-module.exports = { handleDelete, handleSaveChanges, handleEditBook, handleCancel, handleAllBooks, handleViewMore, handleAddBook, handleSearch }
+module.exports = {
+    handleDelete,
+    handleSaveChanges,
+    handleEditBook,
+    handleCancel,
+    handleAllBooks,
+    handleViewMore,
+    handleAddBook,
+    handleSearch
+}

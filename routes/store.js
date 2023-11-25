@@ -1,10 +1,17 @@
 const express = require('express')
-const { handleAddBook, handleAllBooks, handleBookId, handleEdit, handleDone, handleDelete, handleSearch, handleEditBook, handleSaveChanges, handleCancel, handleViewMore } = require('../contoller/storeControl')
+const { handleAddBook,
+    handleAllBooks,
+    handleDelete,
+    handleSearch,
+    handleEditBook,
+    handleSaveChanges,
+    handleCancel,
+    handleViewMore } = require('../contoller/storeControl')
+
 const router = express.Router()
 const jwt = require("jsonwebtoken")
 const jwtSecretKey = process.env.MyJwt
 const multer = require('multer')
-
 const jwtMiddleWare = async (req, res, next) => {
     let { authorization } = req.headers
     let [, myJwt] = authorization.split(' ')
@@ -17,8 +24,7 @@ const jwtMiddleWare = async (req, res, next) => {
         res.send('Cannot Execute Request')
     }
 }
-
-const storage = multer.diskStorage()
+const storage = multer.memoryStorage()
 
 const fileFilter = (req, file, cb) => {
     if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.mimetype)) {
