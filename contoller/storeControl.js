@@ -9,6 +9,7 @@ const handleAddBook = async (req, res) => {
 
     try {
         let newBook = await Books({ author, title, cover: req.file.originalname, genre, description, edit: false, uploaderId: id })
+        console.log(newBook)
         await newBook.save()
     }
     catch (err) { console.error(err) }
