@@ -105,10 +105,10 @@ const handleDelete = async (req, res) => {
 }
 
 const handleSearch = async (req, res) => {
-    const { title } = req.params;
+    const { bookTitle } = req.params;
     try {
         const searchedBook = await Books.findOne({
-            title: { $regex: new RegExp(title, 'i') }
+            title: { $regex: new RegExp(bookTitle, 'i') }
         });
         if (searchedBook) {
             return res.json({ searchedBook });
