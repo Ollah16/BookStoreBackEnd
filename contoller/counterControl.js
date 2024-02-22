@@ -5,10 +5,11 @@ const handleCounts = async (req, res) => {
     try {
         let counts = await Counter.findOne({ counterRecord });
         if (counts) {
-            counts.counterRecord++;
-            await counts.save();
+            counts++;
+            await Counter.findOneAndUpdate({ counterRecord: counts })
         } else {
-            await Counter.create({ counterRecord: 1 });
+            let newCount = Counter({ counterRecord: 1 })
+            await newCount.save()
         }
         res.status(200).json({ message: 'Counter updated successfully' });
     } catch (error) {
