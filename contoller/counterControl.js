@@ -3,10 +3,10 @@ const { Counter } = require("../models/counterModel")
 const handleCounts = async (req, res) => {
 
     try {
-        let counts = await Counter.findOne({ counterRecord });
-        if (counts) {
-            counts++;
-            await Counter.findOneAndUpdate({ counterRecord: counts })
+        console.log('hi')
+        let counts = await Counter.find();
+        if (counts.length) {
+            await Counter.findOneAndUpdate({ counterRecord: counterRecord++ })
         } else {
             let newCount = Counter({ counterRecord: 1 })
             await newCount.save()
