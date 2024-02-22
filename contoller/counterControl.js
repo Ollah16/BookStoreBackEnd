@@ -1,6 +1,6 @@
 const { Counter } = require("../models/counterModel")
 
-export const handleCounts = async (req, res) => {
+const handleCounts = async (req, res) => {
 
     try {
         let counts = await Counter.findOne({ counterRecord });
@@ -17,4 +17,5 @@ export const handleCounts = async (req, res) => {
     }
 };
 
+module.exports = { handleCounts }
 
