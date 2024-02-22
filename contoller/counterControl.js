@@ -5,7 +5,9 @@ const handleCounts = async (req, res) => {
     try {
         let counts = await Counter.find();
         if (counts.length) {
-            await Counter.findOneAndUpdate({ counterRecord: counterRecord++ })
+            let updateCount = await Counter.findOne({ counterRecord })
+
+            await Counter.findOneAndUpdate({ counterRecord: updateCount++ })
         } else {
             let newCount = Counter({ counterRecord: 1 })
             await newCount.save()
